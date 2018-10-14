@@ -1,0 +1,10 @@
+{% extends 'home.html' %}
+
+{% block body %}
+<h3>Список ресторанов около вас:</h3>
+    <ul>
+    {% for res in rest_list %}
+          <li>{{res.name}} {{res.rating}}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
