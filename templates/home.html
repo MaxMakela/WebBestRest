@@ -2,15 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Поиск ресторанов</title>
-</head>
-<body>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        var data;
+        $(function(){
+            $("#search").click(function(){
+                var place = $('input').val();
+                $.getJSON("search_rest?plc="+place, function(result){
+                    data=result;
+                    $.each(result, function(i, r){
+                        $("#top").append("<li>"+r['name']+"</li>");
+                    });
+                 });
+             });
+        });
 
-    <form action="/search_results" method="POST">
-        <p>Введите страну и города:</p>
-        <p><input type = "text" name = "plc" /></p>
+    </script>
+</head>
+<body class="text-center">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <h1 class="h3 mb-3 font-weight-normal">Введи вашу страну и город</h1>
+    <form action="/search_results" method="POST" class="form-signin">
+        <input type = "text" name = "plc" />
         <input type="submit" value="Найти">
     </form>
+    <a href="#" id="search">Найти еще</a>
+    <ul id="top"></ul>
 
     {% block body %}{% endblock %}
 

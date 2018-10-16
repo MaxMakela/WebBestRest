@@ -1,8 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from mapsJson import set_best_rest_list
-from mapsJson import gmaps
+from mapsJson import *
 
 
 app = Flask(__name__)
@@ -20,6 +19,11 @@ def results():
         return render_template('results.html', rest_list=best_rests)
     else:
         return render_template('home.html')
+
+
+@app.route('/search_rest', methods=['POST', 'GET'])
+def get_rest():
+    return get_rest_list(gmaps, request.values['plc'])
 
 
 if __name__ == '__main__':

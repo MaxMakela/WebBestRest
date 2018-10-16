@@ -39,9 +39,19 @@ def set_best_rest_list(gmaps, place):
     #     pl = gmaps.places_nearby(loc, 5000, type='restaurant', page_token=pl['next_page_token'])
     #     rest_list += pl['results']
 
-    best = get_top_best_restaurant(rest_list, 10)
+    #best = get_top_best_restaurant(rest_list, 10)
 
-    return best
+    return rest_list
+
+
+def get_rest_list(gmaps, place):
+    result = gmaps.geocode(place)
+
+    loc = result[0]['geometry']['location']
+    pl = gmaps.places_nearby(loc, 5000, type='restaurant')
+    rest_list = pl['results']
+
+    return json.dumps(rest_list)
 
 
 gmaps = googlemaps.Client(key='AIzaSyDmECqKm1tLn3NggSC-WdsAmpchRyT1bWY')
