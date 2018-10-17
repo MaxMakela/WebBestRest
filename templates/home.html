@@ -6,18 +6,36 @@
     <title>Поиск ресторанов</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
+        function list_sort(a, b){
+               return b['rating'] - a['rating'];
+        }
+
         var data;
         $(function(){
-            $("#search").click(function(){
-                var place = $('input').val();
-                $.getJSON("search_rest?plc="+place, function(result){
-                    data=result;
+            $("#full_search").click(function(){
+                var place = document.getElementById('plc').value;
+                $.getJSON("?plc="+place, function(result){
+                    data = result.sort(list_sort);
                     $.each(result, function(i, r){
                         $("#top").append("<li>"+r['name']+"</li>");
                     });
                  });
              });
         });
+
+
+        $(function(){
+            $("#search").click(function(){
+                var place = document.getElementById('plc').value;
+                $.getJSON("results?plc="+place, function(result){
+                    data = result.sort(list_sort);
+                    $.each(result, function(i, r){
+                        $("#top").append("<li>"+r['name']+"</li>");
+                    });
+                 });
+             });
+        });
+
 
     </script>
 </head>
@@ -27,11 +45,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
     <h1 class="h3 mb-3 font-weight-normal">Введи вашу страну и город</h1>
-    <form action="/search_results" method="POST" class="form-signin">
-        <input type = "text" name = "plc" />
-        <input type="submit" value="Найти">
-    </form>
-    <a href="#" id="search">Найти еще</a>
+    <div>
+        <input type = "text" id ="plc" name = "plc"/>
+        <button id="search">Найти</button>
+    </div>
+        <a href="#" id="full_search">Найти еще</a>
     <ul id="top"></ul>
 
     {% block body %}{% endblock %}
