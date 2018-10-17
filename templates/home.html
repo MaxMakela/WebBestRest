@@ -30,12 +30,11 @@
                 $.getJSON("results?plc="+place, function(result){
                     data = result.sort(list_sort);
                     $.each(result, function(i, r){
-                        $("#top").append("<li>"+r['name']+"</li>");
+                        $("#top").append("<li>"+r['name']+" "+r['rating']+"</li>");
                     });
                  });
              });
         });
-
 
     </script>
 </head>

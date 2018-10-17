@@ -14,9 +14,9 @@ def home():
 
 @app.route('/results', methods=['GET'])
 def results():
-    if request.method == 'GET' and request.values['plc']:
-        best_rests = set_best_rest_list(gmaps, request.values['plc'])
-        return render_template('home.html', rest_list=best_rests)
+    if request.values['plc']:
+        #best_rests = set_best_rest_list(gmaps, request.values['plc'])
+        return get_rest_list(gmaps, request.values['plc'])
     else:
         return render_template('home.html')
 
