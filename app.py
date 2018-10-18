@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, redirect
 from flask import request
 from mapsJson import *
 
@@ -14,16 +14,10 @@ def home():
 
 @app.route('/results', methods=['GET'])
 def results():
-    if request.values['plc']:
-        #best_rests = set_best_rest_list(gmaps, request.values['plc'])
+    if 'plc' in request.values:
         return get_rest_list(gmaps, request.values['plc'])
     else:
-        return render_template('home.html')
-
-#
-# @app.route('/search_rest', methods=['POST', 'GET'])
-# def get_rest():
-#     return get_rest_list(gmaps, request.values['plc'])
+        return redirect('/')
 
 
 if __name__ == '__main__':
