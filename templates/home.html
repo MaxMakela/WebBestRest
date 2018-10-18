@@ -19,7 +19,6 @@
                 $.getJSON(`results?plc=${place}`, function(result){
                     r = result[0].sort(list_sort);
                     next_page_id = result[1];
-                    console.log(next_page_id);
                     $("#top").empty();
                     $.each(r, function(i, rcur){
                         $("#top").append(`<li>${rcur['name']} ${rcur['rating']}</li>`);
@@ -28,7 +27,18 @@
              });
 
             $("#find_next").click(function(){
-
+                var place = $("#plc").val();
+                if(next_page_id!=null){
+                    $.getJSON(`results?plc=${place}&next_page_id=${next_page_id}`, function(result){
+                    r = r.concat(result[0]);
+                    r = r.sort(list_sort);
+                    next_page_id = result[1];
+                    $("#top").empty();
+                    $.each(r, function(i, rcur){
+                        $("#top").append(`<li>${rcur['name']} ${rcur['rating']}</li>`);
+                    });
+                 });
+                }
             });
         });
 
