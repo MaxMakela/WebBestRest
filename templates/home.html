@@ -25,24 +25,24 @@
             $.each(r.sort(list_sort), function(i, rcur){
                 $("#top").append(`<li>${rcur['name']} ${rcur['rating']}</li>`);
             });
-
-            r = []; // to prevent endless list growing 
         }
 
         function updateRestarauntsList(place, page_id) {
             animateLoading(true, page_id);
+            
             $.getJSON(`results?plc=${place}&next_page_id=${page_id}`, function(result){
                 var next_page_id = result[1] || "";
                 r = r.concat(result[0]);
+                showResult();
 
                 if(next_page_id) {
                     window.setTimeout(function() {
                         updateRestarauntsList(place, next_page_id);
-                    }, 1500);
+                    }, 1900);
                 }
                 else {
-                    animateLoading(false, next_page_id);
-                    showResult();
+                    animateLoading(false, "");
+                    r = []; // to prevent endless list growing 
                 }
             });
         }
@@ -50,8 +50,7 @@
         $(function(){
             $("#search").click(function(){
                 clearResult();
-                var place = $("#plc").val();
-                updateRestarauntsList(place, "");
+                updateRestarauntsList($("#plc").val(), "");
             });
         });
 
