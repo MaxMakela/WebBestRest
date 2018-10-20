@@ -14,7 +14,7 @@ def home():
 
 @app.route('/results', methods=['GET'])
 def results():
-    if 'plc'in request.values:
+    if 'plc' in request.values:
         return get_rest_list(gmaps, request.values['plc'], request.values.get("next_page_id"))
     else:
         return redirect('/')
