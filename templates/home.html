@@ -30,7 +30,7 @@
         function updateRestarauntsList(place, page_id) {
             animateLoading(true, page_id);
             
-            $.getJSON(`results?plc=${place}&next_page_id=${page_id}`, function(result){
+            $.getJSON(`/results?plc=${place}&next_page_id=${page_id}`, function(result){
                 var next_page_id = result[1] || "";
                 r = r.concat(result[0]);
                 showResult();
@@ -51,6 +51,7 @@
             $("#search").click(function(){
                 clearResult();
                 updateRestarauntsList($("#plc").val(), "");
+                return false;
             });
         });
 
