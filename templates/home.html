@@ -6,7 +6,7 @@
     <title>MaxMakela: Поиск ресторанов</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-         function list_sort(a, b){
+        function list_sort(a, b) {
             return b['rating'] - a['rating'];
         }
 
@@ -34,7 +34,7 @@
             // Using jquery hide results table here. Hiding means removing it completly with
             // css property display:none. There is a class for that in Bootstrap, find it on 
             // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
-                    $("#top").empty();
+            $("#top").empty();
         }
 
         function showResult() {
@@ -50,13 +50,13 @@
                 // Change link's href below: it should open google maps with the restaurant 
                 let link = `<a href="#">${rcur['name']}</a>`;
                 $("#top").append(`<tr><th scope="row">${i + 1}</th><td>${rcur['rating']}</td><td>${link}</td></tr>`);
-                    });
+            });
         }
 
         function updateRestarauntsList(place, page_id) {
             $.getJSON(`/results?plc=${place}&next_page_id=${page_id}`, (result) => {
                 let next_page_id = result[1] || "";
-                    r = r.concat(result[0]);
+                r = r.concat(result[0]);
                 showResult();
 
                 if(next_page_id) {
@@ -69,8 +69,8 @@
                     animateLoading(false, "");
                     r = []; // to prevent endless list growing 
                 }
-                 });
-                }
+            });
+        }
 
         $(() => {
             $("#search").click(() => {
@@ -90,8 +90,8 @@
     <h3 class="mb-3">Лучшие рестораны</h3>
     <form class="form-inline">
         <input id="plc" class="form-control w-25 mw-50 mr-sm-2" type="search" placeholder="Например: Украина, Киев" aria-label="Search">
-                <button id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
-            </form>
+        <button id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
+    </form>
         
     <!--
     TODO: 
