@@ -3,61 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Поиск ресторанов</title>
+    <title>MaxMakela: Поиск ресторанов</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-         function list_sort(a, b){
+        function list_sort(a, b){
             return b['rating'] - a['rating'];
         }
 
+        let r = [];
+        let maxLength = 60;
+        
+        function animateLoading(isRunning, page_id) {
+            // TODO:
+            // Using jquery make the progress bar visible when isRunning == true
+            // Using jquery make the progress bar hidden when isRunning == false
+            // Visible means the css property 'visibility'. There is a class for that in Bootstrap, 
+            // find on utils page: https://getbootstrap.com/docs/4.1/utilities/visibility/ 
+            // 
+            // Using jquery make the progress bar animation: change its width do to it.
+            // Progress variable is provided below, it calculates width % already.
+            // Progress bar docs: https://getbootstrap.com/docs/4.1/components/progress/
+            let progress = r.length * 100 / maxLength;
 
-        var r;
-        var next_page_id;
-        $(function(){
-            $("#search").click(function(){
-                var place = $("#plc").val();
-                $.getJSON(`results?plc=${place}`, function(result){
-                    r = result[0].sort(list_sort);
-                    next_page_id = result[1];
-                    $("#top").empty();
-                    $.each(r, function(i, rcur){
-                        $("#top").append(`<li>${rcur['name']} ${rcur['rating']}</li>`);
-                    });
-                 });
-             });
+            // conole.log is usefull here for debug purposes
+            console.log(`animation: ${isRunning}, restaurants: ${r.length} is ${progress}%, page: ${page_id}`);
+        }
 
-            $("#find_next").click(function(){
-                var place = $("#plc").val();
-                if(next_page_id!=null){
-                    $.getJSON(`results?plc=${place}&next_page_id=${next_page_id}`, function(result){
-                    r = r.concat(result[0]);
-                    r = r.sort(list_sort);
-                    next_page_id = result[1];
-                    $("#top").empty();
-                    $.each(r, function(i, rcur){
-                        $("#top").append(`<li>${rcur['name']} ${rcur['rating']}</li>`);
-                    });
-                 });
+        function clearResult() {
+            // TODO:
+            // Using jquery hide results table here. Hiding means removing it completly with
+            // css property display:none. There is a class for that in Bootstrap, find it on 
+            // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
+            $("#top").empty();
+        }
+
+        function showResult() {
+            clearResult();
+            // TODO:
+            // Using jquery un-hide results table here. Un-hiding means set css property 
+            // display:block. There is a class for that in Bootstrap, find it on 
+            // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
+            //
+            // Using javascript make it so the list below has 5 top restaurants only.
+            $.each(r.sort(list_sort), (i, rcur) => {
+                // TODO:
+                // Change link's href below: it should open google maps with the restaurant 
+                let link = `<a href="#">${rcur['name']}</a>`;
+                $("#top").append(`<tr><th scope="row">${i + 1}</th><td>${rcur['rating']}</td><td>${link}</td></tr>`);
+            });
+        }
+
+        function updateRestarauntsList(place, page_id) {
+            $.getJSON(`/results?plc=${place}&next_page_id=${page_id}`, (result) => {
+                let next_page_id = result[1] || "";
+                r = r.concat(result[0]);
+                showResult();
+
+                if(next_page_id) {
+                    animateLoading(true, page_id);
+                    window.setTimeout(() => {
+                        updateRestarauntsList(place, next_page_id);
+                    }, 1900);
                 }
+                else {
+                    animateLoading(false, "");
+                    r = []; // to prevent endless list growing 
+                }
+            });
+        }
+
+        $(() => {
+            $("#search").click(() => {
+                clearResult();
+                animateLoading(true, "");
+                updateRestarauntsList($("#plc").val(), "");
+                return false;
             });
         });
 
     </script>
 </head>
-<body class="text-center">
-
+<body class="mt-3 ml-3">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <h1 class="h3 mb-3 font-weight-normal">Введи вашу страну и город</h1>
-    <div>
-        <input type = "text" id ="plc" name = "plc"/>
-        <button id="search">Найти</button>
+    <h3 class="mb-3">Лучшие рестораны</h3>
+    <form class="form-inline">
+        <input id="plc" class="form-control w-25 mw-50 mr-sm-2" type="search" placeholder="Например: Украина, Киев" aria-label="Search">
+        <button id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
+    </form>
+    
+    <!--
+    TODO: 
+    #progress-div below should be invisible by default. Visible means the css property 'visibility'. 
+    There is a class for that in Bootstrap, find on utils page: 
+    https://getbootstrap.com/docs/4.1/utilities/visibility/ 
+    -->
+    <div id="progress-div" class="progress w-75 mt-3" style="height: 0.5em;">
+        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%;" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="60"></div>
     </div>
-        <a href="#" id="find_next">Найти еще</a>
-    <ul id="top"></ul>
-
-    {% block body %}{% endblock %}
-
+    
+    <!--
+    TODO: 
+    #results below should be hidden by default. Hiding means removing it completly with
+    css property display:none. There is a class for that in Bootstrap, find it on 
+    utils page: https://getbootstrap.com/docs/4.1/utilities/display/
+    -->
+    <table id="results" class="table table-hover w-75">
+        <thead>
+            <tr>
+                <th class="w-auto" scope="col">#</th>
+                <th class="w-auto" scope="col">Гугл Рейтинг</th>
+                <th class="w-75" scope="col">Ресторан</th>
+            </tr>
+        </thead>
+        <tbody id="top">
+        </tbody>
+    </table>
 </body>
 </html>
