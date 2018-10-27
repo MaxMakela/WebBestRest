@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template, redirect
 from flask import request
-from mapsJson import *
+from mapsJson import get_rest_list, gmaps
 
 
 app = Flask(__name__)
