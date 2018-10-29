@@ -54,7 +54,8 @@
             // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
             //
             // Using javascript make it so the list below has 5 top restaurants only.
-            $.each(r.sort(list_sort), (i, rcur) => {
+            $("#results").css("display", "block");
+            $.each(r.sort(list_sort).splice(0, 5), (i, rcur) => {
                 // TODO:
                 // Change link's href below: it should open google maps with the restaurant
                 let link = `<a href="#">${rcur['name']}</a>`;
@@ -123,7 +124,7 @@
     utils page: https://getbootstrap.com/docs/4.1/utilities/display/
     -->
 
-    <table id="results" class="table table-hover w-75">
+    <table id="results" class="table table-hover w-75" style="display: none;">
         <thead>
             <tr>
                 <th class="w-auto" scope="col">#</th>
