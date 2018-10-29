@@ -54,11 +54,12 @@
             // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
             //
             // Using javascript make it so the list below has 5 top restaurants only.
+            //https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY
             $("#results").css("display", "block");
             $.each(r.sort(list_sort).splice(0, 5), (i, rcur) => {
                 // TODO:
                 // Change link's href below: it should open google maps with the restaurant
-                let link = `<a href="#">${rcur['name']}</a>`;
+                let link = `<a href="https://www.google.com/maps/search/?api=1&query=${rcur['geometry']['location']['lat']},${rcur['geometry']['location']['lng']}&query_place_id=${rcur['place_id']}">${rcur['name']}</a>`;
                 $("#top").append(`<tr><th scope="row">${i + 1}</th><td>${rcur['rating']}</td><td>${link}</td></tr>`);
             });
         }
