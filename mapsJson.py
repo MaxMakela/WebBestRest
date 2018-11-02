@@ -2,8 +2,9 @@ import googlemaps
 import pdb
 import json
 import time
+import os
 
-gmaps = googlemaps.Client(key='AIzaSyDmECqKm1tLn3NggSC-WdsAmpchRyT1bWY')
+gmaps = googlemaps.Client(key=os.environ['GOOGLE_API_KEY'])
 
 def get_rest_list(gmaps, place, page_id=None):
     result = gmaps.geocode(place)

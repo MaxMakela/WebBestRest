@@ -12,24 +12,10 @@
 
         let r = [];
         let maxLength = 60;
-        
-        function bar_visibility(status){
-            //$("#progress-div").style.visibility = progressBarVisible;
-        }
 
         function animateLoading(isRunning, page_id) {
-            // TODO:
-            // Using jquery make the progress bar visible when isRunning == true
-            // Using jquery make the progress bar hidden when isRunning == false
-            // Visible means the css property 'visibility'. There is a class for that in Bootstrap, 
-            // find on utils page: https://getbootstrap.com/docs/4.1/utilities/visibility/ 
-            // 
-            // Using jquery make the progress bar animation: change its width do to it.
-            // Progress variable is provided below, it calculates width % already.
-            // Progress bar docs: https://getbootstrap.com/docs/4.1/components/progress/
             let progress = r.length * 100 / maxLength;
             let bar_visible = "hidden";
-            // conole.log is usefull here for debug purposes
             if(isRunning){
                 bar_visible = "visible";
             }
@@ -39,26 +25,13 @@
         }
 
         function clearResult() {
-            // TODO:
-            // Using jquery hide results table here. Hiding means removing it completly with
-            // css property display:none. There is a class for that in Bootstrap, find it on 
-            // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
             $("#top").empty();
         }
 
         function showResult() {
             clearResult();
-            // TODO:
-            // Using jquery un-hide results table here. Un-hiding means set css property 
-            // display:block. There is a class for that in Bootstrap, find it on 
-            // utils page: https://getbootstrap.com/docs/4.1/utilities/display/ 
-            //
-            // Using javascript make it so the list below has 5 top restaurants only.
-            //https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY
             $("#results").css("display", "block");
             $.each(r.sort(list_sort).splice(0, 5), (i, rcur) => {
-                // TODO:
-                // Change link's href below: it should open google maps with the restaurant
                 let link = `<a href="https://www.google.com/maps/search/?api=1&query=${rcur['geometry']['location']['lat']},${rcur['geometry']['location']['lng']}&query_place_id=${rcur['place_id']}">${rcur['name']}</a>`;
                 $("#top").append(`<tr><th scope="row">${i + 1}</th><td>${rcur['rating']}</td><td>${link}</td></tr>`);
             });
@@ -87,7 +60,7 @@
             $("#search").click(() => {
                 clearResult();
                 animateLoading(true, "");
-                updateRestarauntsList($("#plc").val(), "");
+                updateRestarauntsList($("#plc").val(), ""); 
                 return false;
             });
         });
@@ -103,13 +76,6 @@
         <input id="plc" class="form-control w-25 mw-50 mr-sm-2" type="search" placeholder="Например: Украина, Киев" aria-label="Search">
         <button id="search" class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
     </form>
-        
-    <!--
-    TODO: 
-    #progress-div below should be invisible by default. Visible means the css property 'visibility'. 
-    There is a class for that in Bootstrap, find on utils page: 
-    https://getbootstrap.com/docs/4.1/utilities/visibility/ 
-    -->
 
     <tbody id="prog-bar">
     </tbody>
@@ -117,14 +83,7 @@
     <div id="progress-div" class="progress w-75 mt-3" style="height: 0.5em; visibility: hidden;">
         <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%;" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="60"></div>
     </div>
-
-    <!--
-    TODO: 
-    #results below should be hidden by default. Hiding means removing it completly with
-    css property display:none. There is a class for that in Bootstrap, find it on 
-    utils page: https://getbootstrap.com/docs/4.1/utilities/display/
-    -->
-
+    
     <table id="results" class="table table-hover w-75" style="display: none;">
         <thead>
             <tr>
